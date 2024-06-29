@@ -1,13 +1,10 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 
 public class BJ25206_너의평점은 {
 	public static void main(String[] args) throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		double cnt =0;
 		double score=0;
 		
@@ -19,6 +16,7 @@ public class BJ25206_너의평점은 {
 				score += Double.parseDouble(inputs[1]) *getPoint(inputs[2]);
 			}
 		}
+		br.close();
 		System.out.printf("%6f",(score/cnt));
 	}
 	
