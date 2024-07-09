@@ -1,29 +1,28 @@
-
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 public class BJ1463_1로만들기 {
-    public static void main(String[] args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static int minOperations(int n) {
+        int[] dp = new int[n + 1];
 
-        int n = Integer.parseInt(br.readLine());
-        
-        int[] dp = new int[n + 1]; 
-        
-        
         for (int i = 2; i <= n; i++) {
-
+            // ���� ���� 1�� ����� �ּ� ���� ���� ���մϴ�.
             dp[i] = dp[i - 1] + 1;
-            if (i % 2 == 0) { // 2�� ������ ��
-                dp[i] = Math.min(dp[i], dp[i / 2] + 1); 
+
+            // 2�� ������ �������� 1�� �� ���� 2�� ���� ��� �� �� ���� ���� ���� �����մϴ�.
+            if (i % 2 == 0) {
+                dp[i] = Math.min(dp[i], dp[i / 2] + 1);
             }
-            if (i % 3 == 0) { // 3���� ������ ��
-                dp[i] = Math.min(dp[i], dp[i / 3] + 1); 
+
+            // 3���� ������ �������� 1�� �� ���, 2�� ���� ���� 3���� ���� ��� �� �� ���� ���� ���� �����մϴ�.
+            if (i % 3 == 0) {
+                dp[i] = Math.min(dp[i], dp[i / 3] + 1);
             }
         }
-        
-        System.out.println(dp[n]);
+
+        return dp[n];
+    }
+
+    public static void main(String[] args) {
+        int n = 10;
+        int result = minOperations(n);
+        System.out.println("���� " + n + "�� 1�� ����� ���� �ּ� ���� ��: " + result);
     }
 }
