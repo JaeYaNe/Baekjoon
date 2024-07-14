@@ -12,8 +12,6 @@ public class BJ15654_N과M5 {
 	public static StringBuilder sb = new StringBuilder();
 	
 	public static void back(int a) {
-		
-		
 	    if (a == m) { // 종료지점
 	        for (int j = 0; j < m; j++) {
 	            sb.append(inputArray[num[j]] + " ");

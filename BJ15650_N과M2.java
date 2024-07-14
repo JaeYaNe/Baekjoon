@@ -1,5 +1,3 @@
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,7 +10,7 @@ public class BJ15650_N과M2 {
 	public static StringBuilder sb = new StringBuilder();
 	
 	public static void back(int a,int b) {
-		if(a > m) { //종료지점
+		if(a > m) { //종료조건
 			for(int j=1; j<=m; j++) {
 				sb.append(num[j]+" ");
 			}

@@ -1,15 +1,13 @@
 /*
 문제해석)
-1. 한 팀당 결과 총합이 5를 초과하면 무조건 False
-2. 6개 팀의 총 승값과 총 패값이 같아야함. 다르면 False
-3. 6개 팀중 총무값은 짝수이고, 예제 3과 같이 무가 한쪽에 쏠리면 False
+1. 한 팀당 결과 총합이 5이하
+2. 6개 팀의 총 승값과 총 패값이 동일
+3. 6개 팀의 총 무승부 개수가 짝수
+4. 무승부 개수의 과반수 이상을 한 팀이 가지고 있으면 안됨
 
 4회의 테스트 케이스, 6개의 팀, 18번의 경기
 풀이
-1. 4회 반복 for문에 6번 반복 for문을 넣고 승,무,패의 값을 넣는다.
-2. 5회 초과 경기가 있는지 체크
-3. 총 승값과 총 패값이 같은지 체크
-4. 무승부 짝이 맞는지 확인
+
 */
 
 import java.io.BufferedReader;
@@ -18,79 +16,55 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class BJ6987_월드컵 {
-
 	static int[][] map = new int[6][3];
-	
-	private static boolean checkFive(int a) {
-		if(a > 5) return true;
-		return false;
-	}
-	
-	private static boolean checkWinLoss(int a, int b) {
-		if(a != b) return true;
-		return false;
-	}
-	
-	private static boolean checkTie(int[] lst) {
-		for(int i = 0; i<5; i++) {
-			if(lst[i]>0) {
-				for(int j = i+1; j<6; j++) {
-					if(lst[j]>0) {
-						lst[i] -= 1;
-						lst[j] -= 1;
-						i--;
-						break;
-					}
-				}
-			}
+	static int[] dab = new int[4];
+	static int i;
+	private static void back(int x, int y) {
+		if(dab[i]==1) return;
+		if(y==6) { x++; y=x+1;}        // 비교를 다했어면 다음 팀 선택
+		if(x==5) {dab[i]=1; return;}   // x가 5이면 분석가능
+		
+		if(map[x][0]>=1 && map[y][2]>=1)  // 승
+		{
+			map[x][0]--;map[y][2]--;
+			back(x,y+1);
+			map[x][0]++;map[y][2]++;
 		}
-		for(int i = 0; i<6; i++) {
-			if(lst[i]>0) return true;
+		if(map[x][1]>=1 && map[y][1]>=1)  // 무
+		{
+			map[x][1]--;map[y][1]--;
+			back(x,y+1);
+			map[x][1]++;map[y][1]++;
 		}
-		return false;
+		if(map[x][2]>=1 && map[y][0]>=1) // 패
+		{
+			map[x][2]--;map[y][0]--;
+			back(x,y+1);
+			map[x][2]++;map[y][0]++;
+		}
 	}
-	
-	public static void main(String[] args) throws IOException{
+
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
-		StringBuilder sb = new StringBuilder();
-		// 1. 4회 반복 for문에 6번 반복 for문을 넣고 승,무,패의 값을 넣는다.
-		for (int i=0; i<4; i++) {
+		
+
+		for (i = 0; i < 4; i++) {
+			// 1. 입력받은 값 배열에 저장
 			st = new StringTokenizer(br.readLine());
-			int win = 0; //승
-			int[] tie = new int[6]; //무
-			int loss = 0;//패
-			for (int j=0; j<6; j++) {
+			int sw = 0;
+			for (int j = 0; j < 6; j++) {
+				
 				map[j][0] = Integer.parseInt(st.nextToken());
 				map[j][1] = Integer.parseInt(st.nextToken());
 				map[j][2] = Integer.parseInt(st.nextToken());
-				
-				// 2. 5회 초과 경기가 있는지 체크 (하나라도 true라면 0 출력후 i for문으로)
-				if (checkFive(map[j][0]) || checkFive(map[j][1]) || checkFive(map[j][2])) {
-					sb.append("0 ");
-					break;
-				}
-				
-				// 3. 총 승값과 패값이 같은지 확인을 위해, 총 승무패 값을 넣는다.
-				
-				win += map[j][0];
-				tie[j] = map[j][1];
-				loss+= map[j][2];
+				int sum = map[j][0]+map[j][1]+map[j][2];
+				if(sum>5) sw = 1;
 			}
-			// 3. 승 패 값이 다르다면 true로 0출력후 i for문으로
-			if(checkWinLoss(win,loss)) {
-				sb.append("0 ");
-				continue;
-			}
-			if(checkTie(tie)) {
-				sb.append("0 ");
-				continue;
-			}
-			sb.append("1 ");
-			
-			
+			if(sw == 0) back(0,1);
 		}
-		System.out.println(sb);
+
+		System.out.printf("%d %d %d %d", dab[0], dab[1], dab[2], dab[3]);
 	}
 
 }
